@@ -15,22 +15,22 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-print("Loading Whisper Medium Model...")
+print("Loading Whisper Model...")
 
 model = WhisperModel(
-    "medium",
+    "small",
     device="cpu",
     compute_type="int8"
 )
 
-print("✅ Whisper Medium Loaded Successfully")
+print("✅ Model Loaded Successfully")
 
 
 @app.get("/")
 def home():
     return {
         "status": "running",
-        "model": "medium"
+        "model": "small"
     }
 
 
@@ -52,16 +52,17 @@ async def transcribe(file: UploadFile = File(...)):
         temp_path = temp.name
 
     try:
+
         segments, info = model.transcribe(
             temp_path,
-            beam_size=5,
-            best_of=5,
+            beam_size=1,
+            best_of=1,
             temperature=0,
-            vad_filter=True,
-            condition_on_previous_text=True
+            condition_on_previous_text=False,
+            vad_filter=False
         )
 
-        text = " ".join(segment.text.strip() for segment in segments)
+        text = "".join(segment.text for segment in segments).strip()
 
         return {
             "success": True,
