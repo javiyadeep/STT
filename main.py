@@ -18,7 +18,7 @@ app.add_middleware(
 print("Loading Whisper Model...")
 
 model = WhisperModel(
-    "distil-large-v2",
+    "small",
     device="cpu",
     compute_type="int8"
 )
@@ -29,7 +29,7 @@ print("✅ Model Loaded Successfully!")
 def home():
     return {
         "status": "running",
-        "model": "distil-large-v2"
+        "model": "small"
     }
 
 @app.get("/health")
